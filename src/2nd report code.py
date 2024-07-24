@@ -1,28 +1,31 @@
-# プログラムの説明:
-# このプログラムは、複数の学生の成績を管理し、合計点と平均点を計算し、
-# 最も成績の良い学生を見つけます。
-def run(students):
-    x = 0
-    y = ""
-    for s in students:
-        total = 0
-        count = 0
-        for g in students[s]:
-            total += g
-            count += 1
-        avg = total / count
-        if total > x:
-            x = total
-            y = s
-        print(f"Student: {s}, Total: {total}, Average: {avg}")
-    return y, x
+class Student:
+    __slots__ = ["name", "scores"]
 
-students = {
-    "Alice": [85, 90, 78],
-    "Bob": [92, 88, 84],
-    "Charlie": [70, 75, 80],
-    "David": [95, 85, 90]
-}
+    def __init__(self, name: str, scores: list[int]) -> None:
+        self.name = name
+        self.scores = scores
 
-top_student, top_score = run(students)
-print(f"Best student: {top_student} with total score: {top_score}")
+    @property
+    def total(self) -> int:
+        return sum(self.scores)
+
+    @property
+    def average(self) -> float:
+        return self.total / len(self.scores)
+
+
+def find_best_student_report(students: list[Student]) -> Student:
+    return max(students, key=lambda x: x.total)
+
+
+if __name__ == "__main__":
+    students = [
+        Student("Alice", [85, 90, 78]),
+        Student("Bob", [92, 88, 84]),
+        Student("Charlie", [70, 75, 80]),
+        Student("David", [95, 85, 90]),
+    ]
+    for student in students:
+        print(f"Student: {student.name}, Total: {student.total}, Average: {student.average}")
+    top_student = find_best_student_report(students)
+    print(f"Best student: {top_student.name} with total score: {top_student.total}")
